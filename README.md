@@ -291,3 +291,47 @@ nid001140>$ conda activate horovod
 (horovod) nid001140>$ srun -N 1 -n 4 python train_hvd.py
 ```
 
+## Submitting and Monitoring a Horovod batch job
+1. edit a batch job script running on 2 nodes with 4 GPUs each:
+```
+perlmutter:login15>$ cat ./horovod_batsh.sh
+#!/bin/bash
+#SBATCH -A dasrepo_g
+#SBATCH -C gpu
+#SBATCH -q regular
+#SBATCH -t 2:00:00
+#SBATCH -N 2
+#SBATCH -c 32
+#SBATCH --ntasks-per-node=4
+#SBATCH --gpus-per-node=4
+#SBATCH -o %x_%j.out
+#SBATCH -e %x_%j.err
+
+export SLURM_CPU_BIND="cores"
+
+module load  cudnn/8.3.2  nccl/2.15.5-ofi  evp-patch
+source ~/.bashrc
+conda activate horovod
+
+#srun python KISTI-DL-tutorial-using-horovod/src/pytorch/pytorch_mnist.py
+#srun python KISTI-DL-tutorial-using-horovod/src/tensorflow/tf_keras_mnist.py
+#srun python KISTI-DL-tutorial-using-horovod/src/pytorch/pytorch_imagenet_resnet50.py
+#srun python KISTI-DL-tutorial-using-horovod/src/tensorflow/tf_keras_imagenet_resnet50.py
+#srun python KISTI-DL-tutorial-using-horovod/src/tensorflow/tf_keras_fashion_mnist.py
+srun python tf_keras_fashion_mnist.py
+```
+2. submit and execute the batch job:
+```
+perlmutter:login15>$ sbatch ./horovod_batch.sh
+Submitted batch job 5473133
+```
+3. check & monitor the batch job status:
+```
+perlmutter:login15>$ squeue -u $USER
+             JOBID PARTITION     NAME     USER ST       TIME  NODES NODELIST(REASON)
+           5473133  gpu_ss11 horovod_    elvis PD       0:00      2 (Priority)
+perlmutter:login15>$ squeue -u $USER
+             JOBID PARTITION     NAME     USER ST       TIME  NODES NODELIST(REASON)
+           5473133  gpu_ss11 horovod_    elvis  R       0:33      2 nid[002836,003928]
+```
+
