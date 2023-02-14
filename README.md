@@ -40,10 +40,10 @@ perlmutter:login15>$ wget https://repo.anaconda.com/archive/Anaconda3-2022.10-Li
 perlmutter:login15>$ cd $SCRATCH
 perlmutter:login15>$ wget https://repo.anaconda.com/miniconda/Miniconda3-latest-Linux-x86_64.sh
 ```
-2. Install Miniconda. By default conda will be installed in your home directory, which has a limited disk space. You will install and create subsequent conda environments on your scratch directory. 
+2. Install Miniconda. By default conda will be installed in your home directory, which has a limited disk space. You will install it on the /global/common/software/myproject directory and then create subsequent conda virtual environments on your scratch directory. 
 ```
-[glogin01]$ chmod 755 Miniconda3-latest-Linux-x86_64.sh
-[glogin01]$ ./Miniconda3-latest-Linux-x86_64.sh
+perlmutter:login15>$ chmod 755 Miniconda3-latest-Linux-x86_64.sh
+perlmutter:login15>$ ./Miniconda3-latest-Linux-x86_64.sh
 
 Welcome to Miniconda3 py39_4.12.0
 
@@ -58,21 +58,21 @@ Do you accept the license terms? [yes|no]
 [no] >>> yes                      <========= type yes here 
 
 Miniconda3 will now be installed into this location:
-/home01/qualis/miniconda3        
+/global/homes/s/swhwang/miniconda3        
 
   - Press ENTER to confirm the location
   - Press CTRL-C to abort the installation
   - Or specify a different location below
 
-[/home01/qualis/miniconda3] >>> /scratch/$USER/miniconda3  <======== type /scratch/$USER/miniconda3 here
-PREFIX=/scratch/qualis/miniconda3
+[/global/homes/s/swhwang/miniconda3] >>> /global/common/software/ddlproj/elvis/miniconda3  <======== type /global/common/software/myproject/$USER/miniconda3 here
+PREFIX=/global/common/software/dasrepo/swhwang/miniconda3
 Unpacking payload ...
 Collecting package metadata (current_repodata.json): done
 Solving environment: done
 
 ## Package Plan ##
 
-  environment location: /scratch/qualis/miniconda3
+  environment location: /global/common/software/ddlproj/elvis/miniconda3
 .
 .
 .
@@ -93,4 +93,12 @@ conda config --set auto_activate_base false
 Thank you for installing Miniconda3!
 ```
 
-2. 
+3. finalize installing Miniconda with environment variables set including conda path.
+```
+perlmutter:login15>$ source ~/.bashrc    # set conda path and environment variables 
+perlmutter:login15>$ conda config --set auto_activate_base false
+perlmutter:login15>$ which conda
+/global/common/software/ddlproj/elvis/miniconda3/condabin/conda
+[glogin01]$ conda --version
+conda 4.12.0
+```
