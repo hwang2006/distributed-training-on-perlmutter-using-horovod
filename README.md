@@ -6,6 +6,8 @@ This repository is intended to share a large-scale distributed deep learning tra
 * [NERSC Perlmutter Supercomputer](#nersc-perlmutter-supercomputer)
 * [Distributed DL training practices on supercomputer](#distributed-dl-training-practices-on-supercomputer)
 * [Installing Conda](#installing-conda)
+* [Why Horovod for distributed DL](#why-horovod-for-distributed-dl)
+* [Horovod Usage](#horovod-usage)
 
 
 ## NERSC Perlmutter Supercomputer
@@ -99,7 +101,7 @@ perlmutter:login15>$ source ~/.bashrc    # set conda path and environment variab
 perlmutter:login15>$ conda config --set auto_activate_base false
 perlmutter:login15>$ which conda
 /global/common/software/ddlproj/elvis/miniconda3/condabin/conda
-[glogin01]$ conda --version
+perlmutter:login15>$ conda --version
 conda 23.1.0
 ```
 
@@ -109,5 +111,199 @@ Horovod, developed by Uber in 2017, is a distributed deep learning training fram
 2. (easy to use & codify) How much modification does one have to make to a existing DL code to make it distributed? and how easy is it to run it?
 3. (fast to run) How much faster would it run in distributed mode and how easy is it to scale up to run?
 
-<p align="center"><img src=" " width=800/></p> 
+<p align="center"><img src="https://user-images.githubusercontent.com/84169368/218693630-4943ed18-488f-41bd-af97-e14520cc5897.png" width=750/></p> 
 
+## Building Horovod
+Now you are ready to build Horovod as a conda virtual environment: 
+1. load modules: 
+```
+perlmutter:login15>$ module load  cudnn/8.7.0  nccl/2.15.5-ofi  evp-patch
+```
+2. create a new conda virtual environment and activate the environment:
+```
+perlmutter:login15>$ conda create -n horovod
+perlmutter:login15>$ conda activate horovod
+```
+3. install the pytorch conda package & the tensorflow pip package:
+```
+(horovod) perlmutter:login15>$ conda install pytorch==1.12.0 torchvision==0.13.0 torchaudio==0.12.0 cudatoolkit=11.3 -c pytorch
+(horovod) perlmutter:login15>$ pip install tensorflow-gpu==2.10.0
+```
+4. install the horovod pip package with support for tensorflow and pytorch with [NCCL](https://developer.nvidia.com/nccl), [MPI](https://www.open-mpi.org/) and [GLOO](https://pytorch.org/docs/stable/distributed.html) enabled:
+```
+(horovod) perlmutter:login15>$ HOROVOD_GPU_OPERATIONS=NCCL HOROVOD_NCCL_LINK=SHARED HOROVOD_WITH_TENSORFLOW=1 HOROVOD_WITH_PYTORCH=1 HOROVOD_WITH_MPI=1 HOROVOD_WITH_GLOO=1 pip install --no-cache-dir horovod
+```
+5. verify the horovod conda environment. You should see output something like the following:
+```
+(horovod) perlmutter:login15>$ horovodrun -cb
+Horovod v0.27.0:
+
+Available Frameworks:
+    [X] TensorFlow
+    [X] PyTorch
+    [ ] MXNet
+
+Available Controllers:
+    [X] MPI
+    [X] Gloo
+
+Available Tensor Operations:
+    [X] NCCL
+    [ ] DDL
+    [ ] CCL
+    [X] MPI
+    [X] Gloo
+```
+
+## Horovod Usage
+To use horovod, five steps/lines to be added in your code:
+1. Initialize Horovod.
+```
+# Tensorflow 
+import horovod.tensorflow as hvd
+hvd.init()
+
+# Keras
+import horovod.keras as hvd
+hvd.init()
+
+# Pytorch
+import horovod.torch as hvd
+hvd.init()
+```
+2. Pin GPU to each worker, making sure each worker to be allocated to each GPU available.
+```
+# Tensorflow/Keras
+tf.config.experimental.set_visible_devices(gpus[hvd.local_rank()], 'GPU')
+
+# Pytorch
+torch.cuda.set_device(hvd.local_rank())
+```
+3. Adjust learning rate and wrap the optimizer
+```
+# Tensorflow
+opt = tf.optimizers.Adam(0.01 * hvd.size())
+opt = hvd.DistributedOptimizer(opt,…)
+
+# Keras
+opt = keras.optimizers.Adadelta(0.01 * hvd.size())
+opt = hvd.DistributedOptimizer(opt,…)
+
+# Pytorch
+opt = optim.SGD(model.parameters(), 0.01 * hvd.size())
+opt= hvd.DistributedOptimizer(opt, …)
+```
+4. Broadcast the initial variable states from the masker worker (rank 0)and synchroize state across workers.
+```
+# Tensorflow/Keras
+callbacks = [hvd.callbacks.BroadcastGlobalVariablesCallback(0)]
+
+# Pytorch
+hvd.broadcast_parameters(model.state_dict(), root_rank=0)
+hvd.broadcast_optimizer_state(optimizer, root_rank=0)
+```
+5. Checkpoint on the master worker (rank 0)
+```
+# Tensorflow/Keras
+if hvd.rank() == 0:
+  callbacks.append(keras.callbacks.ModelCheckpoint(args.checkpoint_format))
+
+# Pytorch
+if hvd.rank() == 0:
+   state = {'model': model.state_dict(), 'optimizer': optimizer.state_dict(), } 
+   torch.save(state, filepath)
+```
+
+6. An example code using Pytorch (see the [src](https://github.com/hwang2006/distributed-training-with-horovod-on-perlmutter/tree/main/src) directory for full example codes): 
+```
+import torch
+import horovod.torch as hvd
+
+# Initialize Horovod
+hvd.init()
+
+# Pin GPUs to local rank
+torch.cuda.set_device(hvd.local_rank())
+
+# Build model
+model = Net()
+model.cuda()
+opt = optim.SGD(model.parameters())
+
+# Adjust learning rate and wrap the optimizer
+opt = optim.SGD(model.parameters(), 0.01 * hvd.size())
+opt = hvd.DistributedOptimizer(opt, …)
+
+# Broadcast parameters and optimizer state from the master worker (rank 0)
+hvd.broadcast_parameters(model.state_dict(), root_rank=0)
+hvd.broadcast_optimizer_state(optimizer, root_rank=0)
+
+for epoch in range (100):
+   for batch, (data, target) in enumerate(...):
+       opt.zero_grad()
+       output = model(data)
+       loss = F.nll_loss(output, target)
+       loss.backward()
+       opt.step()
+   # checkpoint at every epoch
+   if hvd.rank() == 0:
+      state = {'model': model.state_dict(), 'optimizer': optimizer.state_dict(), } 
+      torch.save(state, filepath)
+```
+
+## Running Horovod interactively 
+Now, you are ready to run distributed training using Horovod on Neuron. 
+1. request allocation of available GPU-nodes for interactively running and testing distributed training codes: 
+```
+(horovod) [glogin01]$ salloc --partition=amd_a100nv_8 -J debug --nodes=2 --time=8:00:00 --gres=gpu:4 --comment=python
+salloc: Granted job allocation 154173
+salloc: Waiting for resource configuration
+salloc: Nodes gpu[32-33] are ready for job
+```
+In this example case, gpu32 and gpu33 are allocated with 4 GPUs each, and you are residing on the gpu32 node.
+
+2. load modules again on the gpu node:
+```
+[gpu32]$ module load gcc/10.2.0 cuda/11.4 cudampi/openmpi-4.1.1 cmake/3.16.9
+```
+3. activate the horovod conda environment: 
+```
+[gpu32]$ $ conda activate horovod
+(horovod) [gpu32]$
+```
+4. run & test horovod-enabled distributed DL codes:
+  - to run on the two nodes with 4 GPUs each: 
+```
+# (option 1) run with srun
+(horovod) [gpu32]$ srun -n 8 python train_hvd.py
+```
+```
+# (option 2) run with horovodrun
+(horovod) [gpu32]$ horovodrun -np 8 -H gpu32:4,gpu33:4 python train_hvd.py
+```
+```
+# (option 3) run with mpirun
+(horovod) [gpu32]$ mpirun -np 8 -H gpu32:4,gpu33:4 python train_hvd.py
+```
+  - to run on two nodes with 2 GPUs each:
+```
+# (option 1) run with srun
+(horovod) [gpu32]$ srun -n 4 python train_hvd.py
+```
+```
+# (option 2) run with horovodrun
+(horovod) [gpu32]$ horovodrun -np 4 -H localhost:2,gpu33:2 python train_hvd.py
+```
+```
+# (option 3) run with mpirun
+(horovod) [gpu32]$ mpirun -np 4 -H localhost:2,gpu33:2 python train_hvd.py
+```
+  - to run on the gpu33 with 2 GPUs:
+```
+# (option 1) run with horovodrun
+(horovod) [gpu32]$ horovodrun -np 2 -H gpu33:2 python train_hvd.py
+``` 
+```
+# (option 2) run with horovodrun using gloo collective communications
+(horovod) [gpu32]$ horovodrun --gloo -np 2 -H gpu33:2 python train_hvd.py
+```
