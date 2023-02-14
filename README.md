@@ -255,55 +255,38 @@ for epoch in range (100):
 Now, you are ready to run distributed training using Horovod on Neuron. 
 1. request allocation of available GPU-nodes for interactively running and testing distributed training codes: 
 ```
-(horovod) [glogin01]$ salloc --partition=amd_a100nv_8 -J debug --nodes=2 --time=8:00:00 --gres=gpu:4 --comment=python
-salloc: Granted job allocation 154173
+(horovod) perlmutter:login15>$ salloc --nodes 2 --qos interactive --time 01:00:00 --constraint gpu --gpus-per-node=4 --account=m1234_g
+salloc: Pending job allocation 5472214
+salloc: job 5472214 queued and waiting for resources                                   
+salloc: job 5472214 has been allocated resources                                         
+salloc: Granted job allocation 5472214
 salloc: Waiting for resource configuration
-salloc: Nodes gpu[32-33] are ready for job
+salloc: Nodes nid[001140-001141] are ready for job
 ```
-In this example case, gpu32 and gpu33 are allocated with 4 GPUs each, and you are residing on the gpu32 node.
+In this example case, nid001140 and nid001141 are allocated with 4 GPUs each, and you are residing on the nid001140 node.
 
 2. load modules again on the gpu node:
 ```
-[gpu32]$ module load gcc/10.2.0 cuda/11.4 cudampi/openmpi-4.1.1 cmake/3.16.9
+nid001140>$ module load  cudnn/8.3.2  nccl/2.15.5-ofi  evp-patch
 ```
 3. activate the horovod conda environment: 
 ```
-[gpu32]$ $ conda activate horovod
-(horovod) [gpu32]$
+nid001140>$ conda activate horovod
+(horovod) nid001140>$
 ```
 4. run & test horovod-enabled distributed DL codes:
   - to run on the two nodes with 4 GPUs each: 
 ```
-# (option 1) run with srun
-(horovod) [gpu32]$ srun -n 8 python train_hvd.py
-```
-```
-# (option 2) run with horovodrun
-(horovod) [gpu32]$ horovodrun -np 8 -H gpu32:4,gpu33:4 python train_hvd.py
-```
-```
-# (option 3) run with mpirun
-(horovod) [gpu32]$ mpirun -np 8 -H gpu32:4,gpu33:4 python train_hvd.py
+(horovod) nid001140>$ srun -n 8 python train_hvd.py
 ```
   - to run on two nodes with 2 GPUs each:
 ```
-# (option 1) run with srun
-(horovod) [gpu32]$ srun -n 4 python train_hvd.py
+(horovod) nid001140>$ srun -n 4 python train_hvd.py
+ or
+(horovod) nid001140>$ srun -N 2 -n 4 python train_hvd.py
 ```
+  - to run on one node with 4 GPUs:
 ```
-# (option 2) run with horovodrun
-(horovod) [gpu32]$ horovodrun -np 4 -H localhost:2,gpu33:2 python train_hvd.py
+(horovod) nid001140>$ srun -N 1 -n 4 python train_hvd.py
 ```
-```
-# (option 3) run with mpirun
-(horovod) [gpu32]$ mpirun -np 4 -H localhost:2,gpu33:2 python train_hvd.py
-```
-  - to run on the gpu33 with 2 GPUs:
-```
-# (option 1) run with horovodrun
-(horovod) [gpu32]$ horovodrun -np 2 -H gpu33:2 python train_hvd.py
-``` 
-```
-# (option 2) run with horovodrun using gloo collective communications
-(horovod) [gpu32]$ horovodrun --gloo -np 2 -H gpu33:2 python train_hvd.py
-```
+
