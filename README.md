@@ -8,6 +8,7 @@ This repository is intended to share a large-scale distributed deep learning tra
 * [Installing Conda](#installing-conda)
 * [Why Horovod for distributed DL](#why-horovod-for-distributed-dl)
 * [Horovod Usage](#horovod-usage)
+* [Running Horovod interactively](#running-horovod-interactively)
 
 
 ## NERSC Perlmutter Supercomputer
