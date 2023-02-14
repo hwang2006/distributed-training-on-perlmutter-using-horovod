@@ -4,6 +4,8 @@ This repository is intended to share a large-scale distributed deep learning tra
 
 **Contents**
 * [NERSC Perlmutter Supercomputer](#nersc-perlmutter-supercomputer)
+* [Distributed DL training practices on supercomputer](#distributed-dl-training-practices-on-supercomputer)
+
 
 
 ## NERSC Perlmutter Supercomputer
@@ -13,5 +15,5 @@ This repository is intended to share a large-scale distributed deep learning tra
 
 ## Distributed DL training practices on supercomputer
 We may need to set up some ditributed deep learning routines or workflows by which DL researchers and Supercomputer facilities administrators exchange and share ideas and thoughts as to how to develope and run distributed training/inferencing practices on national supercomputing facilites. It might be that distributed deep learning (DL) practices on national supercomputing facilities are not so hard as we think it is, with proper tools, flexible operation & resource management policies and reasonably easy-to-use services available in the hands of DL researchers and developers. 
-<p align="center"><img src=" " width=550/></p> 
+<p align="center"><img src="https://user-images.githubusercontent.com/84169368/218653307-4928d27e-50e5-4bf6-a8b3-b9ab7914cd63.png" width=500/></p> 
 
