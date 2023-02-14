@@ -9,7 +9,7 @@ This repository is intended to share a large-scale distributed deep learning tra
 * [Why Horovod for distributed DL](#why-horovod-for-distributed-dl)
 * [Horovod Usage](#horovod-usage)
 * [Running Horovod interactively](#running-horovod-interactively)
-
+* [Submitting and Monitoring a Horovod batch job](#submitting-and-monitoring-a-horovod-batch-job)
 
 ## NERSC Perlmutter Supercomputer
 [Perlmutter](https://docs.nersc.gov/systems/perlmutter/), located at [NERSC](https://www.nersc.gov/) in [Lawrence Berkeley National Laboratory](https://www.lbl.gov/), is a HPE Cray EX supercomputer with ~1,500 AMD Milan CPU nodes and ~6000 Nvidia A100 GPUs (4 GPUs per node). It debutted as the world 5th fastest supercomputer in the Top500 list in June 2021. Refer to this [link](https://docs.nersc.gov/systems/perlmutter/architecture/) for the architecutural details of Perlmutter including system specifications, system performance, node specifications and interconnect. [slurm](https://slurm.schedmd.com/) is adopted for cluster/resource management and job scheduling. 
