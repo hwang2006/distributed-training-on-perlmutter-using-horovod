@@ -11,6 +11,8 @@ This repository is intended to share a large-scale distributed deep learning tra
 * [Running Horovod interactively](#running-horovod-interactively)
 * [Submitting and Monitoring a Horovod batch job](#submitting-and-monitoring-a-horovod-batch-job)
 * [Running Jupyter](#running-jupyter)
+* [Why Shifter Container](#why-shifter-container)
+
 
 ## NERSC Perlmutter Supercomputer
 [Perlmutter](https://docs.nersc.gov/systems/perlmutter/), located at [NERSC](https://www.nersc.gov/) in [Lawrence Berkeley National Laboratory](https://www.lbl.gov/), is a HPE Cray EX supercomputer with ~1,500 AMD Milan CPU nodes and ~6000 Nvidia A100 GPUs (4 GPUs per node). It debutted as the world 5th fastest supercomputer in the Top500 list in June 2021. Refer to this [link](https://docs.nersc.gov/systems/perlmutter/architecture/) for the architecutural details of Perlmutter including system specifications, system performance, node specifications and interconnect. [slurm](https://slurm.schedmd.com/) is adopted for cluster/resource management and job scheduling. 
@@ -455,9 +457,9 @@ Password:
 - Providing software solutions to improve system utilization by optimizing common bottlenecks in software delivery and I/O in-general.
 - Empowering the user - deploy your own software environment
 
-Shifter also comes with improvements in performance, especially for shared libraries. It is currently the best performing option for python code stacks across multiple nodes. Also, Shifter can leverage its volume mounting capabilities to provide local-disk like functionality and I/O performance. Shifter can be used interactively on login nodes or in a batch job. NERSC has been working on harnessing the power of Shifter to increase flexibility and usability of its HPC systems including Cori and Perlmutter by enabling Docker-like Linux container technology. Please refer to [Using Shifter at NERSC](https://docs.nersc.gov/development/shifter/how-to-use/) for more details.
+Shifter also comes with improvements in performance, especially for shared libraries. NERSC has been working on harnessing the power of Shifter to increase flexibility and usability of its HPC systems including Cori and Perlmutter by enabling Docker-like Linux container technology. According to NERSC's benchmark testing, it appears that Shifter is the best performing option for python code stacks across multiple nodes because Shifter is allowed to leverage its volume mounting capabilities to provide local-disk like functionality and I/O performance. Please refer to [Using Shifter at NERSC](https://docs.nersc.gov/development/shifter/how-to-use/) for more details.
 
-<p align="center"><img src=" "/></p> 
+<p align="center"><img src="https://user-images.githubusercontent.com/84169368/218930936-f268ab50-c21d-411a-98d0-62ad98348010.png"/></p> 
 
 
 
