@@ -466,13 +466,13 @@ You don't have to bother to deal with all the hassles of the Conda and Horovod, 
 perlmutter:login15>$ salloc --nodes 2 --qos interactive --time 01:00:00 --constraint gpu --gpus-per-node=4 --account=m1234_g
 
 # to run a tensorflow code using the Horovod-enabled shifter image on Perlmutter 
-perlmutter:login15>$ NCCL_DEBUG=INFO srun --mpi=pmi2 -l -n 8 shifter --module=gpu,nccl-2.15 --image=qualis2006/tensorflow-pytorch-horovod:tf2.10_pt1.13 python KISTI-DL-tutorial-using-horovod/src/tensorflow/tf_keras_cats_dogs.py
+perlmutter:login15>$ NCCL_DEBUG=INFO srun --mpi=pmi2 -l -u -n 8 shifter --module=gpu,nccl-2.15 --image=qualis2006/tensorflow-pytorch-horovod:tf2.10_pt1.13 python KISTI-DL-tutorial-using-horovod/src/tensorflow/tf_keras_cats_dogs.py
 
 # to run a keras code using the Horovod-enabled shifter image on Perlmutter
-perlmutter:login15>$ NCCL_DEBUG=INFO srun --mpi=pmi2 -l -n 8 shifter --module=gpu,nccl-2.15 --image=qualis2006/tensorflow-pytorch-horovod:tf2.10_pt1.13 python KISTI-DL-tutorial-using-horovod/src/keras/keras_imagenet_resnet50.py
+perlmutter:login15>$ NCCL_DEBUG=INFO srun --mpi=pmi2 -n 8 shifter --module=gpu,nccl-2.15 --image=qualis2006/tensorflow-pytorch-horovod:tf2.10_pt1.13 python KISTI-DL-tutorial-using-horovod/src/keras/keras_imagenet_resnet50.py
 
 # to run a pytorch code using the Horovod-enabled shifter image on Perlmutter
-perlmutter:login15>$ NCCL_DEBUG=INFO srun --mpi=pmi2 -l -n 8 shifter --module=gpu,nccl-2.15 --image=qualis2006/tensorflow-pytorch-horovod:tf2.10_pt1.13 python KISTI-DL-tutorial-using-horovod/src/pytorch/pytorch_imagenet_resnet50.py
+perlmutter:login15>$ srun --mpi=pmi2 -n 8 shifter --module=gpu,nccl-2.15 --image=qualis2006/tensorflow-pytorch-horovod:tf2.10_pt1.13 python KISTI-DL-tutorial-using-horovod/src/pytorch/pytorch_imagenet_resnet50.py
 ```
 
 You can build your own Horovod Docker image with both Tensorflow and Pytorch enabled on your own machine (e.g., PC, laptop) as follows:   
