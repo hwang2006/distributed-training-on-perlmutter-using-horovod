@@ -1,6 +1,6 @@
 # distributed-training-with-horovod-on-perlmutter
 
-This repository is intended to share a large-scale distributed deep learning training practice for those who might be interested in running his/her deep learning codes accross multiple GPU nodes using [Horovod](https://github.com/horovod/horovod) on Perlmutter.
+This repository is intended to share large-scale distributed deep learning training practices with scientists who might be interested in running his/her deep learning codes accross multiple GPU nodes using [Horovod](https://github.com/horovod/horovod) on Perlmutter.
 
 **Contents**
 * [NERSC Perlmutter Supercomputer](#nersc-perlmutter-supercomputer)
