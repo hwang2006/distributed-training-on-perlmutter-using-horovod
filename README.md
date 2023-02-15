@@ -517,7 +517,7 @@ perlmutter:login15>$ cat ./shifter_horovod_batsh.sh
 #SBATCH --image=qualis2006/tensorflow-pytorch-horovod:tf2.10_pt1.13
 #SBATCH --module=gpu,nccl-2.15
 #SBATCH -N 2
-#SBATCH -A dasrepo_g
+#SBATCH -A ddlproj
 #SBATCH -C gpu
 #SBATCH -q regular
 #SBATCH -t 01:00:00
@@ -536,20 +536,18 @@ srun -l -u --mpi=pmi2 shifter python KISTI-DL-tutorial-using-horovod/src/tensorf
 ```
 2. submit and execute the batch job:
 ```
-[glogin01]$ sbatch shiter_horovod_batch.sh
+perlmutter:login15>$ sbatch shiter_horovod_batch.sh
 Submitted batch job 5497322
 ```
 3. check & monitor the batch job status:
 ```
-[glogin01]$ squeue -u $USER
-             JOBID PARTITION     NAME     USER ST       TIME  NODES NODELIST(REASON)
-           5497322  gpu_ss11 shifter_  swhwang PD       0:00      2 (Priority)
-[glogin01]$ squeue -u $USER
 perlmutter:login15>$ squeue -u $USER
              JOBID PARTITION     NAME     USER ST       TIME  NODES NODELIST(REASON)
-           perlmutter:login15>$ squeue -u $USER
+           5497322  gpu_ss11 shifter_  swhwang PD       0:00      2 (Priority)
+perlmutter:login15>$ squeue -u $USER
              JOBID PARTITION     NAME     USER ST       TIME  NODES NODELIST(REASON)
-           5497322  gpu_ss11 shifter_    elvis  R       2:33      2 nid[002836,003928]
+           5497322  gpu_ss11 shifter_  swhwang  R       8:36      2 nid[008500-008501]
+
 ```
 
 
