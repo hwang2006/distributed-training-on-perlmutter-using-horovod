@@ -15,5 +15,5 @@
 #export NCCL_DEBUG=INFO
 
 #srun -l -u --mpi=pmi2 shifter bash -c "python horovod/examples/tensorflow2/tensorflow2_keras_mnist.py"
-#srun -l -u --mpi=pmi2 shifter bash -c "python distributed-training-using-horovod-on-perlmutter/src/tensorflow/tf_keras_imagenet_resnet50.py"
-srun -l -u --mpi=pmi2 shifter python distributed-training-using-horovod-on-perlmutter/src/tensorflow/tf_keras_imagenet_resnet50.py
+#srun -l -u --mpi=pmi2 shifter bash -c "python distributed-training-on-perlmutter-using-horovod/src/tensorflow/tf_keras_imagenet_resnet50.py"
+srun -l -u --mpi=pmi2 shifter python distributed-training-on-perlmutter-using-horovod/src/tensorflow/tf_keras_imagenet_resnet50.py

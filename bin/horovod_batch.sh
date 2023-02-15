@@ -16,6 +16,6 @@ module load  cudnn/8.3.2  nccl/2.15.5-ofi  evp-patch
 source ~/.bashrc
 conda activate craympi-hvd
 
-srun python distributed-training-using-horovod-on-perlmutter/src/tensorflow/tf_keras_mnist.py
-#srun python distributed-training-using-horovod-on-perlmutter/src/pytorch/pytorch_imagenet_resnet50.py
-#srun python distributed-training-using-horovod-on-perlmutter/src/tensorflow/tf_keras_imagenet_resnet50.py
+srun python distributed-training-on-perlmutter-using-horovod/src/tensorflow/tf_keras_mnist.py
+#srun python distributed-training-on-perlmutter-using-horovod/src/pytorch/pytorch_imagenet_resnet50.py
+#srun python distributed-training-on-perlmutter-using-horovod/src/tensorflow/tf_keras_imagenet_resnet50.py

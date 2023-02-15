@@ -5,8 +5,6 @@ module restore
 module load cudnn/8.7.0  nccl/2.15.5-ofi  evp-patch
 
 # create the horovd virtual environment
-# make sure that miniconda was installed in /scratch/userID/miniconda3
-# prefix (=horovod directory): /scratch/$USER/miniconda3/envs/hvd-env
 conda env create -f environment.yml --force
 
 # activate the horovod environment
