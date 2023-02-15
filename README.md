@@ -294,7 +294,7 @@ nid001140>$ conda activate horovod
 ## Submitting and Monitoring a Horovod batch job
 1. edit a batch job script running on 2 nodes with 4 GPUs each:
 ```
-perlmutter:login15>$ cat ./horovod_batsh.sh
+perlmutter:login15>$ cat horovod_batsh.sh
 #!/bin/bash
 #SBATCH -A dasrepo_g
 #SBATCH -C gpu
@@ -322,7 +322,7 @@ srun python tf_keras_fashion_mnist.py
 ```
 2. submit and execute the batch job:
 ```
-perlmutter:login15>$ sbatch ./horovod_batch.sh
+perlmutter:login15>$ sbatch horovod_batch.sh
 Submitted batch job 5473133
 ```
 3. check & monitor the batch job status:
