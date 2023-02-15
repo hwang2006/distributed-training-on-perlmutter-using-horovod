@@ -318,8 +318,8 @@ perlmutter:login15>$ cat shifter_horovod_batch.sh
 #export NCCL_DEBUG=INFO
 
 #srun -l -u --mpi=pmi2 shifter bash -c "python horovod/examples/tensorflow2/tensorflow2_keras_mnist.py"
-#srun -l -u --mpi=pmi2 shifter bash -c "python distributed-training-using-horovod-on-perlmutter/src/tensorflow/tf_keras_imagenet_resnet50.py"
-srun -l -u --mpi=pmi2 shifter python distributed-training-using-horovod-on-perlmutter/src/tensorflow/tf_keras_imagenet_resnet50.py
+#srun -l -u --mpi=pmi2 shifter bash -c "python distributed-training-on-perlmutter-using-horovod/src/tensorflow/tf_keras_imagenet_resnet50.py"
+srun -l -u --mpi=pmi2 shifter python distributed-training-on-perlmutter-using-horovod/src/tensorflow/tf_keras_imagenet_resnet50.py
 ```
 2. submit and execute the batch job:
 ```
@@ -411,7 +411,7 @@ echo "end of the job"
 - to launch a jupyter notebook server 
 ```
 perlmutter:login15>$ sbatch jupyter_run.sh
-Submitted batch job XXXXXX
+Submitted batch job 5494200
 ```
 - to check if a jupyter notebook server is running
 ```
@@ -530,8 +530,8 @@ perlmutter:login15>$ cat ./shifter_horovod_batsh.sh
 #export NCCL_DEBUG=INFO
 
 #srun -l -u --mpi=pmi2 shifter bash -c "python horovod/examples/tensorflow2/tensorflow2_keras_mnist.py"
-#srun -l -u --mpi=pmi2 shifter bash -c "python distributed-training-using-horovod-on-perlmutter/src/tensorflow/tf_keras_imagenet_resnet50.py"
-srun -l -u --mpi=pmi2 shifter python distributed-training-using-horovod-on-perlmutter/src/tensorflow/tf_keras_imagenet_resnet50.py
+#srun -l -u --mpi=pmi2 shifter bash -c "python distributed-training-on-perlmutter-using-horovod/src/tensorflow/tf_keras_imagenet_resnet50.py"
+srun -l -u --mpi=pmi2 shifter python distributed-training-on-perlmutter-using-horovod/src/tensorflow/tf_keras_imagenet_resnet50.py
 
 ```
 2. submit and execute the batch job:
