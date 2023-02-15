@@ -12,6 +12,8 @@ This repository is intended to share a large-scale distributed deep learning tra
 * [Submitting and Monitoring a Horovod batch job](#submitting-and-monitoring-a-horovod-batch-job)
 * [Running Jupyter](#running-jupyter)
 * [Why Shifter Container](#why-shifter-container)
+* [Running Horovod interactively using Shifter](#running-horovod-interactively-using-shifter)
+* [Submitting and Monitoring a Horovod batch job using Shifter](#submitting-and-monitoring-a-horovod-batch-job-using-shifter)
 
 
 ## NERSC Perlmutter Supercomputer
@@ -543,7 +545,11 @@ Submitted batch job 5497322
              JOBID PARTITION     NAME     USER ST       TIME  NODES NODELIST(REASON)
            5497322  gpu_ss11 shifter_  swhwang PD       0:00      2 (Priority)
 [glogin01]$ squeue -u $USER
-
+perlmutter:login15>$ squeue -u $USER
+             JOBID PARTITION     NAME     USER ST       TIME  NODES NODELIST(REASON)
+           perlmutter:login15>$ squeue -u $USER
+             JOBID PARTITION     NAME     USER ST       TIME  NODES NODELIST(REASON)
+           5497322  gpu_ss11 shifter_    elvis  R       2:33      2 nid[002836,003928]
 ```
 
 
