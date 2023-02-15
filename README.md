@@ -297,35 +297,31 @@ nid001140>$ conda activate horovod
 ## Submitting and Monitoring a Horovod batch job
 1. edit a batch job script running on 2 nodes with 4 GPUs each:
 ```
-perlmutter:login15>$ cat horovod_batsh.sh
+perlmutter:login15>$ cat shifter_horovod_batch.sh
 #!/bin/bash
+
+#SBATCH --image=qualis2006/tensorflow-pytorch-horovod:tf2.10_pt1.13
+#SBATCH --module=gpu,nccl-2.15
+#SBATCH -N 2
 #SBATCH -A dasrepo_g
 #SBATCH -C gpu
 #SBATCH -q regular
-#SBATCH -t 2:00:00
-#SBATCH -N 2
-#SBATCH -c 32
+#SBATCH -t 01:00:00
 #SBATCH --ntasks-per-node=4
 #SBATCH --gpus-per-node=4
+#SBATCH -c 32
 #SBATCH -o %x_%j.out
 #SBATCH -e %x_%j.err
 
-export SLURM_CPU_BIND="cores"
+#export NCCL_DEBUG=INFO
 
-module load  cudnn/8.3.2  nccl/2.15.5-ofi  evp-patch
-source ~/.bashrc
-conda activate horovod
-
-#srun python KISTI-DL-tutorial-using-horovod/src/pytorch/pytorch_mnist.py
-#srun python KISTI-DL-tutorial-using-horovod/src/tensorflow/tf_keras_mnist.py
-#srun python KISTI-DL-tutorial-using-horovod/src/pytorch/pytorch_imagenet_resnet50.py
-#srun python KISTI-DL-tutorial-using-horovod/src/tensorflow/tf_keras_imagenet_resnet50.py
-#srun python KISTI-DL-tutorial-using-horovod/src/tensorflow/tf_keras_fashion_mnist.py
-srun python tf_keras_fashion_mnist.py
+#srun -l -u --mpi=pmi2 shifter bash -c "python horovod/examples/tensorflow2/tensorflow2_keras_mnist.py"
+#srun -l -u --mpi=pmi2 shifter bash -c "python KISTI-DL-tutorial-using-horovod/src/tensorflow/tf_keras_imagenet_resnet50.py"
+srun -l -u --mpi=pmi2 shifter python KISTI-DL-tutorial-using-horovod/src/tensorflow/tf_keras_imagenet_resnet50.py
 ```
 2. submit and execute the batch job:
 ```
-perlmutter:login15>$ sbatch horovod_batch.sh
+perlmutter:login15>$ sbatch shifter_horovod_batch.sh
 Submitted batch job 5473133
 ```
 3. check & monitor the batch job status:
@@ -422,7 +418,7 @@ perlmutter:login15>$ squeue -u $USER
            5494200  gpu_ss11 jupyter_  swhwan PD       0:00      1 (Priority)
 perlmutter:login15>$ squeue -u $USER
              JOBID       PARTITION     NAME     USER    STATE       TIME TIME_LIMI  NODES NODELIST(REASON)
-            XXXXXX    amd_a100nv_8 jupyter_    evlis  RUNNING       0:02   8:00:00      1 nid001140
+            5494200       gpu_ss11  jupyter_    evlis  RUNNING       0:02   8:00:00      1 nid001140
 perlmutter:login15>$ cat slurm-XXXXXX.out
 .
 .
@@ -475,6 +471,79 @@ perlmutter:login15>$ NCCL_DEBUG=INFO srun --mpi=pmi2 -l -n 8 shifter --module=gp
 
 # to run a pytorch code using the Horovod-enabled shifter image on Perlmutter
 perlmutter:login15>$ NCCL_DEBUG=INFO srun --mpi=pmi2 -l -n 8 shifter --module=gpu,nccl-2.15 --image=qualis2006/tensorflow-pytorch-horovod:tf2.10_pt1.13 python KISTI-DL-tutorial-using-horovod/src/pytorch/pytorch_imagenet_resnet50.py
+```
+
+You can build your own Horovod Docker image with both Tensorflow and Pytorch enabled on your own machine (e.g., PC, laptop) as follows:   
+```
+# create a Dockerfile
+[hwang@ubuntu20]$ cat Dockerfile
+FROM nvcr.io/nvidia/pytorch:22.11-py3
+
+RUN \
+    echo "PIP installing tensorflow-gpu..." && \
+    pip install tensorflow-gpu==2.10.0      && \
+    echo "PIP installing filelock..."       && \
+    pip install filelock
+
+ENV HOROVOD_GPU_OPERATIONS=NCCL \
+    HOROVOD_NCCL_LINK=SHARED    \
+    HOROVOD_WITH_TENSORFLOW=1   \
+    HOROVOD_WITH_PYTORCH=1      \
+    HOROVOD_WITH_MPI=1          \
+    HOROVOD_WITH_GLOO=1
+
+RUN \
+    echo "PIP Installing Horovod..."        && \
+    pip install --no-cache-dir horovod
+
+
+# build a Horovod Docker image
+[hwang@ubuntu20]$ docker build -t qualis2006/tensorflow-pytorch-horovod:tf2.10_pt1.13 .
+
+# list Docker images on your machine
+REPOSITORY                              TAG             IMAGE ID       CREATED         SIZE
+qualis2006/tensorflow-pytorch-horovod   tf2.10_pt1.13   cd355901ec90   2 days ago      20.1GB
+.
+.
+```
+
+## Submitting and Monitoring a Horovod batch job using Shifter 
+1. edit a batch job script running on 2 nodes with 4 GPUs each:
+```
+perlmutter:login15>$ cat ./shifter_horovod_batsh.sh
+#!/bin/bash
+#SBATCH --image=qualis2006/tensorflow-pytorch-horovod:tf2.10_pt1.13
+#SBATCH --module=gpu,nccl-2.15
+#SBATCH -N 2
+#SBATCH -A dasrepo_g
+#SBATCH -C gpu
+#SBATCH -q regular
+#SBATCH -t 01:00:00
+#SBATCH --ntasks-per-node=4
+#SBATCH --gpus-per-node=4
+#SBATCH -c 32
+#SBATCH -o %x_%j.out
+#SBATCH -e %x_%j.err
+
+#export NCCL_DEBUG=INFO
+
+#srun -l -u --mpi=pmi2 shifter bash -c "python horovod/examples/tensorflow2/tensorflow2_keras_mnist.py"
+#srun -l -u --mpi=pmi2 shifter bash -c "python KISTI-DL-tutorial-using-horovod/src/tensorflow/tf_keras_imagenet_resnet50.py"
+srun -l -u --mpi=pmi2 shifter python KISTI-DL-tutorial-using-horovod/src/tensorflow/tf_keras_imagenet_resnet50.py
+
+```
+2. submit and execute the batch job:
+```
+[glogin01]$ sbatch shiter_horovod_batch.sh
+Submitted batch job 5497322
+```
+3. check & monitor the batch job status:
+```
+[glogin01]$ squeue -u $USER
+             JOBID PARTITION     NAME     USER ST       TIME  NODES NODELIST(REASON)
+           5497322  gpu_ss11 shifter_  swhwang PD       0:00      2 (Priority)
+[glogin01]$ squeue -u $USER
+
 ```
 
 
