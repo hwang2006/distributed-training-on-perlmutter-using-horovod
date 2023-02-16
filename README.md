@@ -258,8 +258,8 @@ for epoch in range (100):
 ```
 
 ## Running Horovod interactively 
-Now, you are ready to run distributed training using Horovod on Neuron. 
-1. request allocation of available GPU-nodes for interactively running and testing distributed training codes: 
+Now, you are ready to run distributed training using Horovod on Neuron. Please refer to [Running jobs](https://docs.nersc.gov/jobs/) for more details.
+1. request allocation of available GPU-nodes for interactively running and testing distributed training codes. Please refer to [Interactive Jobs](https://docs.nersc.gov/jobs/interactive/) for more details of interactive resource allocation.
 ```
 (horovod) perlmutter:login15>$ salloc --nodes 2 --qos interactive --time 01:00:00 --constraint gpu --gpus-per-node=4 --account=m1234_g
 salloc: Pending job allocation 5472214
@@ -271,16 +271,16 @@ salloc: Nodes nid[001140-001141] are ready for job
 ```
 In this example case, nid001140 and nid001141 are allocated with 4 GPUs each, and you are residing on the nid001140 node.
 
-2. load modules again on the gpu node:
+2. load modules again on the gpu node.
 ```
 nid001140>$ module load  cudnn/8.3.2  nccl/2.15.5-ofi  evp-patch
 ```
-3. activate the horovod conda environment: 
+3. activate the horovod conda environment. 
 ```
 nid001140>$ conda activate horovod
 (horovod) nid001140>$
 ```
-4. run & test horovod-enabled distributed DL codes:
+4. run & test horovod-enabled distributed DL codes. Please refer to 
   - to run on the two nodes with 4 GPUs each: 
 ```
 (horovod) nid001140>$ srun -n 8 python train_hvd.py
@@ -297,7 +297,7 @@ nid001140>$ conda activate horovod
 ```
 
 ## Submitting and Monitoring a Horovod batch job
-1. edit a batch job script running on 2 nodes with 4 GPUs each:
+1. edit a batch job script running on 2 nodes with 4 GPUs each. Please refer to [Running Jobs on Perlmutter](https://docs.nersc.gov/systems/perlmutter/running-jobs/) for some examples of slurm job scripts.
 ```
 perlmutter:login15>$ cat shifter_horovod_batch.sh
 #!/bin/bash
@@ -322,12 +322,12 @@ perlmutter:login15>$ cat shifter_horovod_batch.sh
 #srun -l -u --mpi=pmi2 shifter bash -c "python distributed-training-on-perlmutter-using-horovod/src/pytorch/pytorch_imagenet_resnet50.py"
 srun -l -u --mpi=pmi2 shifter python distributed-training-on-perlmutter-using-horovod/src/tensorflow/tf_keras_imagenet_resnet50.py
 ```
-2. submit and execute the batch job:
+2. submit and execute the batch job.
 ```
 perlmutter:login15>$ sbatch shifter_horovod_batch.sh
 Submitted batch job 5473133
 ```
-3. check & monitor the batch job status:
+3. check & monitor the batch job status.
 ```
 perlmutter:login15>$ squeue -u $USER
              JOBID PARTITION     NAME     USER ST       TIME  NODES NODELIST(REASON)
