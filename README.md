@@ -160,6 +160,23 @@ Available Tensor Operations:
     [X] MPI
     [X] Gloo
 ```
+6. You have built the horovod virtual environment based on [Crap MPICH](https://docs.nersc.gov/development/programming-models/mpi/cray-mpich/) that is default and 
+recommended on Cray systems like Perlmutter. You can also build your horovod environment against [Open MPI](https://docs.nersc.gov/development/programming-models/mpi/openmpi/) by loading the openmpi module. 
+```
+perlmutter:login15>$ module restore
+perlmutter:login15>$ module load nccl/2.14.3 cudnn/8.7.0
+perlmutter:login15>$ module use /global/common/software/m3169/perlmutter/modulefiles
+perlmutter:login15>$ module load openmpi/4.1.3-ucx-1.11.1-cuda-21.11_11.5
+
+perlmutter:login15>$ conda create -n openmpi-hvd
+perlmutter:login15>$ conda activate openmpi-hvd
+
+(openmpi-hvd) perlmutter:login15>$ conda install pytorch==1.12.0 torchvision==0.13.0 torchaudio==0.12.0 cudatoolkit=11.3 -c pytorch
+(openmpi-hvd) perlmutter:login15>$ pip install tensorflow-gpu==2.10.0
+(openmpi-hvd) perlmutter:login15>$ HOROVOD_GPU_OPERATIONS=NCCL HOROVOD_NCCL_LINK=SHARED HOROVOD_WITH_TENSORFLOW=1 HOROVOD_WITH_PYTORCH=1 HOROVOD_WITH_MPI=1 HOROVOD_WITH_GLOO=1 pip install --no-cache-dir horovod
+
+(openmpi-hvd) perlmutter:login15>$ horovodrun -cb
+```
 
 ## Horovod Usage
 To use horovod, five steps/lines to be added in your code:
@@ -294,6 +311,23 @@ nid001140>$ conda activate horovod
   - to run on one node with 4 GPUs:
 ```
 (horovod) nid001140>$ srun -N 1 -n 4 python train_hvd.py
+```
+6. You can also run the openmpi-enabled horovod interactively   
+```
+perlmutter:login15>$ salloc --nodes 2 --qos interactive --time 01:00:00 --constraint gpu --gpus-per-node=4 --account=m1234_g
+nid001140>$ module restore
+nid001140>$ module load nccl/2.14.3 cudnn/8.7.0
+nid001140>$ module use /global/common/software/m3169/perlmutter/modulefiles
+nid001140>$ module load openmpi/4.1.3-ucx-1.11.1-cuda-21.11_11.5
+
+nid001140>$ conda activate openmpi-hvd
+
+(openmpi-hvd) nid001140>$ horovodrun -np 8 -H nid001140:4,nid001141:4 python train_hvd.py
+ or
+(openmpi-hvd) nid001140>$ mpirun -np 8 -H nid001140:4,nid001141:4 python train_hvd.py
+
+(openmpi-hvd) nid001140>$ mpirun -np 4 -H nid001140:2,nid001141:2 python train_hvd.py
+(openmpi-hvd) nid001140>$ mpirun -np 4 python train_hvd.py 
 ```
 
 ## Submitting and Monitoring a Horovod batch job
