@@ -452,7 +452,7 @@ Password:
 ## Why Shifter Container? 
 [Shifter](https://shifter.readthedocs.io/en/latest/) is designed to enable environment containers for HPC.  It allows a user to create their own software environment, typically with Docker, then run it at a supercomputing facility. Shifter aims to increase scientific computing productivity by:
 - Simplifying software deployment and management
-- Slowing user code to be portable
+- Allowing user code to be portable
 - Enabling scientists to share HPC software directly using the Docker framework and Dockerhub community of software.
 - Encouraging repeatable and reproducible science with more durable software environments.
 - Providing software solutions to improve system utilization by optimizing common bottlenecks in software delivery and I/O in-general.
