@@ -48,7 +48,7 @@ perlmutter:login15>$ wget https://repo.anaconda.com/archive/Anaconda3-2022.10-Li
 perlmutter:login15>$ cd $SCRATCH
 perlmutter:login15>$ wget https://repo.anaconda.com/miniconda/Miniconda3-latest-Linux-x86_64.sh
 ```
-2. Install Miniconda. By default conda will be installed in your home directory, which has a limited disk space. You will install it on the /global/common/software/myproject directory and then create subsequent conda virtual environments on your scratch directory. 
+2. Install Miniconda. By default conda will be installed in your home directory, which has a limited disk space. Please refer to [File System Overview](https://docs.nersc.gov/filesystems/) for more details of NERSC storage systems . You will install it on the /global/common/software/myproject directory and then create subsequent conda virtual environments on your scratch directory. 
 ```
 perlmutter:login15>$ chmod 755 Miniconda3-latest-Linux-x86_64.sh
 perlmutter:login15>$ ./Miniconda3-latest-Linux-x86_64.sh
