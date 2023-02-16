@@ -13,7 +13,7 @@ This repository is intended to share large-scale distributed deep learning train
 * [Running Jupyter](#running-jupyter)
 * [Why Shifter Container](#why-shifter-container)
 * [Running Horovod interactively using Shifter](#running-horovod-interactively-using-shifter)
-* [Submitting and Monitoring a Horovod batch job using Shifter](#submitting-and-monitoring-a-horovod-batch-job-using-shifter)
+* [Submitting and Running a Horovod batch job using Shifter](#submitting-and-monitoring-a-horovod-batch-job-using-shifter)
 
 
 ## NERSC Perlmutter Supercomputer
@@ -573,7 +573,7 @@ qualis2006/tensorflow-pytorch-horovod   tf2.10_pt1.13   cd355901ec90   2 days ag
 .
 ```
 
-## Submitting and Monitoring a Horovod batch job using Shifter 
+## Submitting and Running a Horovod batch job using Shifter 
 1. edit a batch job script running on 2 nodes with 4 GPUs each:
 ```
 perlmutter:login15>$ cat ./shifter_horovod_batsh.sh
@@ -597,12 +597,12 @@ perlmutter:login15>$ cat ./shifter_horovod_batsh.sh
 #srun -l -u --mpi=pmi2 shifter bash -c "python distributed-training-on-perlmutter-using-horovod/src/tensorflow/tf_keras_imagenet_resnet50.py"
 srun -l -u --mpi=pmi2 shifter python distributed-training-on-perlmutter-using-horovod/src/tensorflow/tf_keras_imagenet_resnet50.py
 ```
-2. submit and execute the batch job:
+2. submit and execute the batch job.
 ```
 perlmutter:login15>$ sbatch shiter_horovod_batch.sh
 Submitted batch job 5497322
 ```
-3. check & monitor the batch job status:
+3. check the batch job status.
 ```
 perlmutter:login15>$ squeue -u $USER
              JOBID PARTITION     NAME     USER ST       TIME  NODES NODELIST(REASON)
