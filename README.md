@@ -462,7 +462,7 @@ Shifter also comes with improvements in performance, especially for shared libra
 <p align="center"><img src="https://user-images.githubusercontent.com/84169368/218930936-f268ab50-c21d-411a-98d0-62ad98348010.png"/></p> 
 
 ## Running Horovod interactively using Shifter
-You don't have to bother to deal with all the hassles of the Conda and Horovod, and just request an allocation of available nodes using the Slurm salloc command and run a horovod-enabled shifter container built on Permutter. That's it!
+You don't have to bother to deal with all the hassles of the Conda and Horovod, and just request an allocation of available nodes using the Slurm salloc command and run a horovod-enabled shifter container built on Perlmutter. That's it!
 ```
 perlmutter:login15>$ salloc --nodes 2 --qos interactive --time 01:00:00 --constraint gpu --gpus-per-node=4 --account=m1234_g
 
@@ -470,7 +470,7 @@ perlmutter:login15>$ salloc --nodes 2 --qos interactive --time 01:00:00 --constr
 perlmutter:login15>$ NCCL_DEBUG=INFO srun --mpi=pmi2 -l -u -n 8 shifter --module=gpu,nccl-2.15 --image=qualis2006/tensorflow-pytorch-horovod:tf2.10_pt1.13 python distributed-training-using-horovod-on-perlmutter/src/tensorflow/tf_keras_cats_dogs.py
 
 # to run a keras code using the Horovod-enabled shifter image on Perlmutter
-perlmutter:login15>$ NCCL_DEBUG=INFO srun --mpi=pmi2 -n 8 shifter --module=gpu,nccl-2.15 --image=qualis2006/tensorflow-pytorch-horovod:tf2.10_pt1.13 python distributed-training-using-horovod-on-perlmutter/src/keras/keras_imagenet_resnet50.py
+perlmutter:login15>$ srun --mpi=pmi2 -n 8 shifter --module=gpu,nccl-2.15 --image=qualis2006/tensorflow-pytorch-horovod:tf2.10_pt1.13 python distributed-training-using-horovod-on-perlmutter/src/keras/keras_imagenet_resnet50.py
 
 # to run a pytorch code using the Horovod-enabled shifter image on Perlmutter
 perlmutter:login15>$ srun --mpi=pmi2 -n 8 shifter --module=gpu,nccl-2.15 --image=qualis2006/tensorflow-pytorch-horovod:tf2.10_pt1.13 python distributed-training-using-horovod-on-perlmutter/src/pytorch/pytorch_imagenet_resnet50.py
