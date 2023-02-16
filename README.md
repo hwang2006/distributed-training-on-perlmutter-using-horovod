@@ -348,7 +348,7 @@ export SLURM_CPU_BIND="cores"
 
 module load  cudnn/8.3.2  nccl/2.15.5-ofi  evp-patch
 source ~/.bashrc
-conda activate craympi-hvd
+conda activate horovod
 
 srun python distributed-training-on-perlmutter-using-horovod/src/tensorflow/tf_keras_mnist.py
 #srun python distributed-training-on-perlmutter-using-horovod/src/pytorch/pytorch_imagenet_resnet50.py
@@ -368,7 +368,7 @@ perlmutter:login15>$ squeue -u $USER
              JOBID PARTITION     NAME     USER ST       TIME  NODES NODELIST(REASON)
            5473133  gpu_ss11 horovod_    elvis  R       0:33      2 nid[002836,003928]
 ```
-You can also submit and run openmpi-enabled horovod batch jobs
+You can also submit and run an openmpi-enabled horovod batch job
 ```
 perlmutter:login15>$ cat openmpi_horovod_batch.sh
 #!/bin/bash
