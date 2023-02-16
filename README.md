@@ -319,6 +319,7 @@ perlmutter:login15>$ cat shifter_horovod_batch.sh
 
 #srun -l -u --mpi=pmi2 shifter bash -c "python horovod/examples/tensorflow2/tensorflow2_keras_mnist.py"
 #srun -l -u --mpi=pmi2 shifter bash -c "python distributed-training-on-perlmutter-using-horovod/src/tensorflow/tf_keras_imagenet_resnet50.py"
+#srun -l -u --mpi=pmi2 shifter bash -c "python distributed-training-on-perlmutter-using-horovod/src/pytorch/pytorch_imagenet_resnet50.py"
 srun -l -u --mpi=pmi2 shifter python distributed-training-on-perlmutter-using-horovod/src/tensorflow/tf_keras_imagenet_resnet50.py
 ```
 2. submit and execute the batch job:
