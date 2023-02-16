@@ -323,9 +323,7 @@ nid001140>$ module load openmpi/4.1.3-ucx-1.11.1-cuda-21.11_11.5
 nid001140>$ conda activate openmpi-hvd
 
 (openmpi-hvd) nid001140>$ horovodrun -np 8 -H nid001140:4,nid001141:4 python train_hvd.py
- or
 (openmpi-hvd) nid001140>$ mpirun -np 8 -H nid001140:4,nid001141:4 python train_hvd.py
-
 (openmpi-hvd) nid001140>$ mpirun -np 4 -H nid001140:2,nid001141:2 python train_hvd.py
 (openmpi-hvd) nid001140>$ mpirun -np 4 python train_hvd.py 
 ```
@@ -396,6 +394,10 @@ conda activate openmpi-hvd
 srun python distributed-training-on-perlmutter-using-horovod/src/tensorflow/tf_keras_mnist.py
 #srun python distributed-training-on-perlmutter-using-horovod/src/pytorch/pytorch_imagenet_resnet50.py
 #srun python distributed-training-on-perlmutter-using-horovod/src/tensorflow/tf_keras_imagenet_resnet50.py
+
+
+perlmutter:login15>$ sbatch openmpi_horovod_batch.sh
+perlmutter:login15>$ squeue -u $USER
 ```
 
 ## Running Jupyter
