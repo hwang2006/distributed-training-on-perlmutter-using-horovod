@@ -9,7 +9,7 @@ This repository is intended to share large-scale distributed deep learning train
 * [Why Horovod for distributed DL](#why-horovod-for-distributed-dl)
 * [Horovod Usage](#horovod-usage)
 * [Running Horovod interactively](#running-horovod-interactively)
-* [Submitting and Monitoring a Horovod batch job](#submitting-and-monitoring-a-horovod-batch-job)
+* [Submitting and Running a Horovod batch job](#submitting-and-running-a-horovod-batch-job)
 * [Running Jupyter](#running-jupyter)
 * [Why Shifter Container](#why-shifter-container)
 * [Running Horovod interactively using Shifter](#running-horovod-interactively-using-shifter)
@@ -328,7 +328,7 @@ nid001140>$ conda activate openmpi-hvd
 (openmpi-hvd) nid001140>$ mpirun -np 4 python train_hvd.py 
 ```
 
-## Submitting and Monitoring a Horovod batch job
+## Submitting and Running a Horovod batch job
 1. edit a batch job script running on 2 nodes with 4 GPUs each. Please refer to [Running Jobs on Perlmutter](https://docs.nersc.gov/systems/perlmutter/running-jobs/) for some examples of slurm job scripts.
 ```
 perlmutter:login15>$ cat horovod_batch.sh
@@ -354,12 +354,12 @@ srun python distributed-training-on-perlmutter-using-horovod/src/tensorflow/tf_k
 #srun python distributed-training-on-perlmutter-using-horovod/src/pytorch/pytorch_imagenet_resnet50.py
 #srun python distributed-training-on-perlmutter-using-horovod/src/tensorflow/tf_keras_imagenet_resnet50.py
 ```
-2. submit and execute the batch job.
+2. submit and run the batch job.
 ```
 perlmutter:login15>$ sbatch horovod_batch.sh
 Submitted batch job 5473133
 ```
-3. check & monitor the batch job status.
+3. check the batch job status.
 ```
 perlmutter:login15>$ squeue -u $USER
              JOBID PARTITION     NAME     USER ST       TIME  NODES NODELIST(REASON)
@@ -368,7 +368,7 @@ perlmutter:login15>$ squeue -u $USER
              JOBID PARTITION     NAME     USER ST       TIME  NODES NODELIST(REASON)
            5473133  gpu_ss11 horovod_    elvis  R       0:33      2 nid[002836,003928]
 ```
-You can also submit and run an openmpi-enabled horovod batch job
+You can also submit and run openmpi-enabled horovod batch jobs
 ```
 perlmutter:login15>$ cat openmpi_horovod_batch.sh
 #!/bin/bash
