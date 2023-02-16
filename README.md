@@ -333,32 +333,32 @@ nid001140>$ conda activate openmpi-hvd
 ## Submitting and Monitoring a Horovod batch job
 1. edit a batch job script running on 2 nodes with 4 GPUs each. Please refer to [Running Jobs on Perlmutter](https://docs.nersc.gov/systems/perlmutter/running-jobs/) for some examples of slurm job scripts.
 ```
-perlmutter:login15>$ cat shifter_horovod_batch.sh
+perlmutter:login15>$ cat horovod_batch.sh
 #!/bin/bash
-
-#SBATCH --image=qualis2006/tensorflow-pytorch-horovod:tf2.10_pt1.13
-#SBATCH --module=gpu,nccl-2.15
-#SBATCH -N 2
-#SBATCH -A dasrepo_g
+#SBATCH -A m1234_g
 #SBATCH -C gpu
 #SBATCH -q regular
-#SBATCH -t 01:00:00
-#SBATCH --ntasks-per-node=4
-#SBATCH --gpus-per-node=4
+#SBATCH -t 2:00:00
+#SBATCH -N 2
 #SBATCH -c 32
+#SBATCH --ntasks-per-node=4
+#SBATCH --gpus-per-node=4 
 #SBATCH -o %x_%j.out
 #SBATCH -e %x_%j.err
 
-#export NCCL_DEBUG=INFO
+export SLURM_CPU_BIND="cores"
 
-#srun -l -u --mpi=pmi2 shifter bash -c "python horovod/examples/tensorflow2/tensorflow2_keras_mnist.py"
-#srun -l -u --mpi=pmi2 shifter bash -c "python distributed-training-on-perlmutter-using-horovod/src/tensorflow/tf_keras_imagenet_resnet50.py"
-#srun -l -u --mpi=pmi2 shifter bash -c "python distributed-training-on-perlmutter-using-horovod/src/pytorch/pytorch_imagenet_resnet50.py"
-srun -l -u --mpi=pmi2 shifter python distributed-training-on-perlmutter-using-horovod/src/tensorflow/tf_keras_imagenet_resnet50.py
+module load  cudnn/8.3.2  nccl/2.15.5-ofi  evp-patch
+source ~/.bashrc
+conda activate craympi-hvd
+
+srun python distributed-training-on-perlmutter-using-horovod/src/tensorflow/tf_keras_mnist.py
+#srun python distributed-training-on-perlmutter-using-horovod/src/pytorch/pytorch_imagenet_resnet50.py
+#srun python distributed-training-on-perlmutter-using-horovod/src/tensorflow/tf_keras_imagenet_resnet50.py
 ```
 2. submit and execute the batch job.
 ```
-perlmutter:login15>$ sbatch shifter_horovod_batch.sh
+perlmutter:login15>$ sbatch horovod_batch.sh
 Submitted batch job 5473133
 ```
 3. check & monitor the batch job status.
@@ -369,6 +369,33 @@ perlmutter:login15>$ squeue -u $USER
 perlmutter:login15>$ squeue -u $USER
              JOBID PARTITION     NAME     USER ST       TIME  NODES NODELIST(REASON)
            5473133  gpu_ss11 horovod_    elvis  R       0:33      2 nid[002836,003928]
+```
+You can also submit and run openmpi-enabled horovod batch jobs
+```
+perlmutter:login15>$ cat openmpi_horovod_batch.sh
+#!/bin/bash
+#SBATCH -A m1234_g
+#SBATCH -C gpu
+#SBATCH -q regular
+#SBATCH -t 2:00:00
+#SBATCH -N 2
+#SBATCH -c 32
+#SBATCH --ntasks-per-node=4
+#SBATCH --gpus-per-node=4 
+#SBATCH -o %x_%j.out
+#SBATCH -e %x_%j.err
+
+export SLURM_CPU_BIND="cores"
+
+module load nccl/2.14.3 cudnn/8.7.0
+module use /global/common/software/m3169/perlmutter/modulefiles
+module load openmpi/4.1.3-ucx-1.11.1-cuda-21.11_11.5
+source ~/.bashrc
+conda activate openmpi-hvd
+
+srun python distributed-training-on-perlmutter-using-horovod/src/tensorflow/tf_keras_mnist.py
+#srun python distributed-training-on-perlmutter-using-horovod/src/pytorch/pytorch_imagenet_resnet50.py
+#srun python distributed-training-on-perlmutter-using-horovod/src/tensorflow/tf_keras_imagenet_resnet50.py
 ```
 
 ## Running Jupyter
