@@ -338,7 +338,7 @@ perlmutter:login15>$ squeue -u $USER
 ```
 
 ## Running Jupyter
-[Jupyter](https://jupyter.org/) is free software, open standards, and web services for interactive computing across all programming languages. Jupyterlab is the latest web-based interactive development environment for notebooks, code, and data. The Jupyter Notebook is the original web application for creating and sharing computational documents. You will run a notebook server on a worker node (*not* on a login node), which will be accessed from the browser on your PC or labtop through SSH tunneling. In order to do so, you need to add the horovod-enabled virtual envrionment that you have created as a python kernel.
+[Jupyter](https://jupyter.org/) is free software, open standards, and web services for interactive computing across all programming languages. Jupyterlab is the latest web-based interactive development environment for notebooks, code, and data. The Jupyter Notebook is the original web application for creating and sharing computational documents. NERSC provides a [JupyterHub](https://docs.nersc.gov/services/jupyter/#jupyterhub) service that allows you to run a jupyter notebook on Perlmutter. You can also run your jupyter notebook server on a compute node (*not* on a login node), which will be accessed from the browser on your PC or labtop through SSH tunneling. In order to do so, you need to add the horovod-enabled virtual envrionment that you have created as a python kernel.
 1. activate the horovod-enabled virtual environment:
 ```
 perlmutter:login15>$ conda activate horovod
@@ -360,7 +360,7 @@ Available kernels:
   pytho       /global/common/software/ddlproj/evlis/miniconda3/envs/craympi-hvd/share/jupyter/kernels/python3
   horovod     /global/u1/s/elvis/.local/share/jupyter/kernels/horovod
 ```
-5. launch a jupyter notebook server on a worker node 
+5. launch a jupyter notebook server on a compute node 
 - to deactivate the virtual environment
 ```
 (horovod) perlmutter:login15>$ conda deactivate
