@@ -220,7 +220,7 @@ if hvd.rank() == 0:
    torch.save(state, filepath)
 ```
 
-6. An example code using Pytorch (see the [src](https://github.com/hwang2006/distributed-training-with-horovod-on-perlmutter/tree/main/src) directory for full example codes): 
+6. An example code using Pytorch (see the [src](https://github.com/hwang2006/distributed-training-with-on-perlmutter-using-horovod/tree/main/src) directory for full example codes): 
 ```
 import torch
 import horovod.torch as hvd
