@@ -325,7 +325,10 @@ nid001140>$ conda activate openmpi-hvd
 (openmpi-hvd) nid001140>$ horovodrun -np 8 -H nid001140:4,nid001141:4 python train_hvd.py
 (openmpi-hvd) nid001140>$ mpirun -np 8 -H nid001140:4,nid001141:4 python train_hvd.py
 (openmpi-hvd) nid001140>$ mpirun -np 4 -H nid001140:2,nid001141:2 python train_hvd.py
-(openmpi-hvd) nid001140>$ mpirun -np 4 python train_hvd.py 
+(openmpi-hvd) nid001140>$ mpirun -np 4 python train_hvd.py
+
+** Note: For some openmpi-relating issue, if it failed to run, you should be able to run it with Gloo instead of MPI.
+(openmpi-hvd) nid001140>$ horovodrun --gloo -np 8 -H nid001140:4,nid001141:4 python train_hvd.py
 ```
 
 ## Submitting and Running a Horovod batch job
