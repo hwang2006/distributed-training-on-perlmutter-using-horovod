@@ -275,7 +275,7 @@ for epoch in range (100):
 ```
 
 ## Running Horovod interactively 
-Now, you are ready to run distributed training using Horovod on Neuron. Please refer to [Running jobs](https://docs.nersc.gov/jobs/) for more details.
+Now, you are ready to run distributed training using Horovod on Perlmutter. Please refer to [Running jobs](https://docs.nersc.gov/jobs/) for more details.
 1. request allocation of available GPU-nodes for interactively running and testing distributed training codes. Please refer to [Interactive Jobs](https://docs.nersc.gov/jobs/interactive/) for more details of interactive resource allocation.
 ```
 (horovod) perlmutter:login15>$ salloc --nodes 2 --qos interactive --time 01:00:00 --constraint gpu --gpus-per-node=4 --account=m1234_g
@@ -501,9 +501,9 @@ perlmutter:login15>$ cat slurm-XXXXXX.out
 perlmutter:login15>$ cat port_forwarding_command
 ssh -L localhost:8888:nid######:##### $USER@neuron.ksc.re.kr
 ```
-6. open a SSH client (e.g., Putty, PowerShell, Command Prompt, etc) on your PC or laptop and log in to Neuron just by copying and pasting the port_forwarding_command:
+6. open a SSH client (e.g., Putty, PowerShell, Command Prompt, etc) on your PC or laptop and log in to Perlmutter just by copying and pasting the port_forwarding_command:
 ```
-C:\Users\hwang>ssh -L localhost:8888:nid######:##### evlis@perlmutter-p1.nersc.gov
+C:\Users\hwang>ssh -L localhost:8888:nid######:##### elvis@perlmutter-p1.nersc.gov
 Password(OTP):
 Password:
 ```
