@@ -160,7 +160,7 @@ Available Tensor Operations:
     [X] MPI
     [X] Gloo
 ```
-6. You have built the horovod virtual environment based on [Crap MPICH](https://docs.nersc.gov/development/programming-models/mpi/cray-mpich/) that is default and 
+6. You have built the horovod virtual environment based on [Cray MPICH](https://docs.nersc.gov/development/programming-models/mpi/cray-mpich/) that is default and 
 recommended on Cray systems like Perlmutter. You can also build your horovod environment against [Open MPI](https://docs.nersc.gov/development/programming-models/mpi/openmpi/) by loading the openmpi module. 
 ```
 perlmutter:login15>$ module restore
