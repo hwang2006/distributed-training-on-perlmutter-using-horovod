@@ -319,7 +319,7 @@ nid001140>$ conda activate horovod
 perlmutter:login15>$ salloc --nodes 2 --qos interactive --time 01:00:00 --constraint gpu --gpus-per-node=4 --account=m1234_g
 nid001140>$ module restore
 nid001140>$ module load nccl/2.14.3 cudnn/8.7.0
-nid001140>$ module use /global/common/software/m3169/perlmutter/modulefiles
+nid001140>$ module use /global/common/software/dasrepo/swhwang/modulefiles
 nid001140>$ module load openmpi/4.1.3-ucx-1.11.1-cuda-21.11_11.5
 
 nid001140>$ conda activate openmpi-hvd
