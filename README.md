@@ -174,7 +174,8 @@ perlmutter:login15>$ conda activate openmpi-hvd
 
 (openmpi-hvd) perlmutter:login15>$ conda install pytorch==1.12.0 torchvision==0.13.0 torchaudio==0.12.0 cudatoolkit=11.3 -c pytorch
 (openmpi-hvd) perlmutter:login15>$ pip install tensorflow-gpu==2.10.0
-(openmpi-hvd) perlmutter:login15>$ HOROVOD_GPU_OPERATIONS=NCCL HOROVOD_NCCL_LINK=SHARED HOROVOD_WITH_TENSORFLOW=1 HOROVOD_WITH_PYTORCH=1 HOROVOD_WITH_MPI=1 HOROVOD_WITH_GLOO=1 pip install --no-cache-dir horovod
+(openmpi-hvd) perlmutter:login15>$ HOROVOD_GPU_OPERATIONS=NCCL HOROVOD_NCCL_LINK=SHARED HOROVOD_WITH_TENSORFLOW=1 \
+HOROVOD_WITH_PYTORCH=1 HOROVOD_WITH_MPI=1 HOROVOD_WITH_GLOO=1 pip install --no-cache-dir horovod
 
 (openmpi-hvd) perlmutter:login15>$ horovodrun -cb
 ```
