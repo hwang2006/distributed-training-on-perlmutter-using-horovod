@@ -391,7 +391,7 @@ perlmutter:login15>$ cat openmpi_horovod_batch.sh
 export SLURM_CPU_BIND="cores"
 
 module load nccl/2.14.3 cudnn/8.7.0
-module use /global/common/software/m3169/perlmutter/modulefiles
+module use /global/common/software/dasrepo/swhwang/modulefiles
 module load openmpi/4.1.3-ucx-1.11.1-cuda-21.11_11.5
 source ~/.bashrc
 conda activate openmpi-hvd
