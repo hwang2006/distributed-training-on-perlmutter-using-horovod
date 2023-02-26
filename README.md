@@ -7,6 +7,7 @@ This repository is intended to share large-scale distributed deep learning train
 * [Distributed DL training practices on supercomputer](#distributed-dl-training-practices-on-supercomputer)
 * [Installing Conda](#installing-conda)
 * [Why Horovod for distributed DL](#why-horovod-for-distributed-dl)
+* [Building Horovod](#building-horovod)
 * [Horovod Usage](#horovod-usage)
 * [Running Horovod interactively](#running-horovod-interactively)
 * [Submitting and Running a Horovod batch job](#submitting-and-running-a-horovod-batch-job)
