@@ -15,7 +15,7 @@ This repository is intended to share large-scale distributed deep learning train
 * [Why Shifter Container](#why-shifter-container)
 * [Running Horovod interactively using Shifter](#running-horovod-interactively-using-shifter)
 * [Submitting and Running a Horovod batch job using Shifter](#submitting-and-monitoring-a-horovod-batch-job-using-shifter)
-* [A glimpse of Running Pytorch Lightning](a-glimpse-of-running-pytorch-lightning)
+* [A glimpse of Running Pytorch Lightning](#a-glimpse-of-running-pytorch-lightning)
 
 
 ## NERSC Perlmutter Supercomputer
