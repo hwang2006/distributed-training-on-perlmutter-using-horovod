@@ -15,6 +15,7 @@ This repository is intended to share large-scale distributed deep learning train
 * [Why Shifter Container](#why-shifter-container)
 * [Running Horovod interactively using Shifter](#running-horovod-interactively-using-shifter)
 * [Submitting and Running a Horovod batch job using Shifter](#submitting-and-monitoring-a-horovod-batch-job-using-shifter)
+* [A glimpse of Running Pytorch Lightning](a-glimpse-of-running-pytorch-lightning)
 
 
 ## NERSC Perlmutter Supercomputer
@@ -619,6 +620,49 @@ perlmutter:login15>$ squeue -u $USER
            5497322  gpu_ss11 shifter_  swhwang  R       8:36      2 nid[008500-008501]
 ```
 
+## A glimpse of Running Pytorch Lightning
+[Pytorch Lightning](https://www.pytorchlightning.ai/index.html) is a lightweight wrapper or interface on top of PyTorch, which simplifies the implementation of complex deep learning models. It is a PyTorch extension that enables researchers and practitioners to focus more on their research and less on the engineering aspects of deep learning. PyTorch Lightning automates many of the routine tasks, such as distributing training across multiple GPUs, logging, and checkpointing, so that the users can focus on writing high-level code for their models.
 
-
-
+We will show a glimpse of how to run a simple pytorch lightning code on multiple nodes interactively.
+1. Install Pytorch Lightning:
+```
+perlmutter:login15>$ conda activate horovod
+(horovod) perlmutter:login15>$ pip install lightning
+```
+2. request allocation of available GPU-nodes:
+```
+(horovod) perlmutter:login15>$ salloc --nodes 2 --qos interactive --time 01:00:00 --constraint gpu --gpus-per-node=4 --account=m1234_g
+salloc: Pending job allocation 5472214
+salloc: job 5472214 queued and waiting for resources                                   
+salloc: job 5472214 has been allocated resources                                         
+salloc: Granted job allocation 5472214
+salloc: Waiting for resource configuration
+salloc: Nodes nid[001140-001141] are ready for job
+```
+3. load modules and activate the horovod conda environment:
+```
+nid001140>$ module load cudnn/8.3.2 nccl/2.14.3  evp-patch
+nid001140>$ conda activate horovod
+(horovod) nid001140>$
+```
+4. run pytorch a lightning code:
+- to run on the two nodes with 4 GPUs each
+```
+(horovod) nid001140>$ srun -N 2 --ntasks-per-node=4 python distributed-training-on-perlmutter-using-horovod/src/pytorch-lightning/pytorch_mnist_lightning.py --num_nodes 2
+```
+- to run on the two nodes with 2 GPUs each
+```
+(horovod) nid001140>$ srun -N 2 --ntasks-per-node=2 python distributed-training-on-perlmutter-using-horovod/src/pytorch-lightning/pytorch_mnist_lightning.py --num_nodes 2 --devices 2
+```
+- to run on the two nodes with 1 GPU each
+```
+(horovod) nid001140>$ srun -N 2 --ntasks-per-node=1 python distributed-training-on-perlmutter-using-horovod/src/pytorch-lightning/pytorch_mnist_lightning.py --num_nodes 2 --devices 1
+```
+- to run one node with 4 GPUs
+```
+(horovod) nid001140>$ python distributed-training-on-perlmutter-using-horovod/src/pytorch-lightning/pytorch_mnist_lightning.py 
+```
+- to run one node with 2 GPUs
+```
+(horovod) nid001140>$ python distributed-training-on-perlmutter-using-horovod/src/pytorch-lightning/pytorch_mnist_lightning.py --devices 2
+```
