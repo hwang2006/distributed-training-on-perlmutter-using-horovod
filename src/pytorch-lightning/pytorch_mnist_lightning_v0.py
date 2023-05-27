@@ -1,55 +1,45 @@
 '''
 1) Single node, multi-GPUs
-$ python pt_mnist_lightning.py
+$ python pytorch_lightning_intro.py
 
 2) 2 nodes, 2 GPUs
-$ srun -N 2 --ntasks-per-node=2 python pt_mnist_lightning.py --num_nodes 2
+$ srun -N 2 -n 4 python pytorch_lightning_intro.py
+Note that num_nodes to be specified as 2 in Trainer
+
 '''
 
+
 import os
-#import pandas as pd
-#import seaborn as sn
-#from IPython.display import display
 
-# Pytorch modules
+import pytorch_lightning as L
+import pandas as pd
+import seaborn as sn
 import torch
-from torch.nn import functional as F
+from IPython.display import display
+from pytorch_lightning.loggers import CSVLogger
 from torch import nn
-from torch.optim import Adam
+from torch.nn import functional as F
 from torch.utils.data import DataLoader, random_split
-
-
-# Pytorch-Lightning
-from lightning import LightningDataModule, LightningModule, Trainer
-#from pytorch_lightning.loggers import CSVLogger
-from lightning.pytorch.loggers import CSVLogger
-import lightning as L 
-
-
-# Dataset
 from torchmetrics import Accuracy
-from torchvision.datasets import MNIST
 from torchvision import transforms
+from torchvision.datasets import MNIST
 
-PATH_DATASETS = os.environ.get("PATH_DATASETS", "./data")
+PATH_DATASETS = os.environ.get("PATH_DATASETS", ".")
 BATCH_SIZE = 256 if torch.cuda.is_available() else 64
 
-class LitMNIST(LightningModule):
-    def __init__(self):
-        super(LitMNIST, self).__init__()
-        self.conv1 = nn.Conv2d(1, 32, 3, 1)
-        self.conv2 = nn.Conv2d(32, 64, 3, 1)
-        self.dropout1 = nn.Dropout(0.25)
-        self.dropout2 = nn.Dropout(0.5)
-        self.fc1 = nn.Linear(9216, 128)
-        self.fc2 = nn.Linear(128, 10)
+class LitMNIST(L.LightningModule):
+    def __init__(self, data_dir=PATH_DATASETS, hidden_size=64, learning_rate=2e-4):
+        super().__init__()
 
-        #self.learning_rate = 1.0
-        self.learning_rate = 1e-3
-        self.data_dir = PATH_DATASETS
-        self.val_accuracy = Accuracy(task="multiclass", num_classes=10)
-        self.test_accuracy = Accuracy(task="multiclass", num_classes=10)
+        # Set our init args as class attributes
+        self.data_dir = data_dir
+        self.hidden_size = hidden_size
+        self.learning_rate = learning_rate
 
+        # Hardcode some dataset specific attributes
+        self.num_classes = 10
+        self.dims = (1, 28, 28)
+        channels, width, height = self.dims
         self.transform = transforms.Compose(
             [
                 transforms.ToTensor(),
@@ -57,21 +47,24 @@ class LitMNIST(LightningModule):
             ]
         )
 
+        # Define PyTorch model
+        self.model = nn.Sequential(
+            nn.Flatten(),
+            nn.Linear(channels * width * height, hidden_size),
+            nn.ReLU(),
+            nn.Dropout(0.1),
+            nn.Linear(hidden_size, hidden_size),
+            nn.ReLU(),
+            nn.Dropout(0.1),
+            nn.Linear(hidden_size, self.num_classes),
+        )
+
+        self.val_accuracy = Accuracy(task="multiclass", num_classes=10)
+        self.test_accuracy = Accuracy(task="multiclass", num_classes=10)
 
     def forward(self, x):
-        x = self.conv1(x)
-        x = F.relu(x)
-        x = self.conv2(x)
-        x = F.relu(x)
-        x = F.max_pool2d(x, 2)
-        x = self.dropout1(x)
-        x = torch.flatten(x, 1)
-        x = self.fc1(x)
-        x = F.relu(x)
-        x = self.dropout2(x)
-        x = self.fc2(x)
-        output = F.log_softmax(x, dim=1)
-        return output
+        x = self.model(x)
+        return F.log_softmax(x, dim=1)
 
     def training_step(self, batch, batch_idx):
         x, y = batch
@@ -90,7 +83,6 @@ class LitMNIST(LightningModule):
         self.log("val_loss", loss, prog_bar=True)
         self.log("val_acc", self.val_accuracy, prog_bar=True)
 
-
     def test_step(self, batch, batch_idx):
         x, y = batch
         logits = self(x)
@@ -101,7 +93,6 @@ class LitMNIST(LightningModule):
         # Calling self.log will surface up scalars for you in TensorBoard
         self.log("test_loss", loss, prog_bar=True)
         self.log("test_acc", self.test_accuracy, prog_bar=True)
- 
 
     def configure_optimizers(self):
         optimizer = torch.optim.Adam(self.parameters(), lr=self.learning_rate)
@@ -135,42 +126,37 @@ class LitMNIST(LightningModule):
     def test_dataloader(self):
         return DataLoader(self.mnist_test, batch_size=BATCH_SIZE)
 
+#model = LitMNIST()
+#trainer = L.Trainer(
+#    #accelerator="cpu",
+#    #devices=1,
+#    #strategy="ddp_spawn",
+#    #accelerator="gpu",
+#    accelerator="auto",
+#    strategy="ddp",
+#    devices=torch.cuda.device_count() if torch.cuda.is_available() else None,
+#    max_epochs=10,
+#    num_nodes=2,
+#    logger=CSVLogger(save_dir="logs/"),
+#)
+#trainer.fit(model)
 
-from argparse import ArgumentParser
 
-def main(hparams):
+def main():
     model = LitMNIST()
     trainer = L.Trainer(
         #accelerator="cpu",
         #devices=1,
-        #strategy="ddp_spawn",
+        #strategy="ddp_spawn", 
         #accelerator="gpu",
-        #accelerator="auto",
-        accelerator=hparams.accelerator,
-        strategy=hparams.strategy,
-        devices=hparams.devices,
+        accelerator="auto",
+        strategy="ddp", 
+        devices=torch.cuda.device_count() if torch.cuda.is_available() else None,
         max_epochs=10,
-        num_nodes=hparams.num_nodes,
+        num_nodes=2,
         logger=CSVLogger(save_dir="logs/"),
     )
     trainer.fit(model)
 
-    # Lightning will automatically test using the best saved checkpoint (conditioned on val_loss)
-    trainer.test()
-    
-    #metrics = pd.read_csv(f"{trainer.logger.log_dir}/metrics.csv")
-    #del metrics["step"]
-    #metrics.set_index("epoch", inplace=True)
-    #display(metrics.dropna(axis=1, how="all").head())
-    #sn.relplot(data=metrics, kind="line")
-
 if __name__ ==  '__main__':
-    parser = ArgumentParser()
-    parser.add_argument("--accelerator", default="gpu" if torch.cuda.is_available() else "auto")
-    parser.add_argument("--devices", default=torch.cuda.device_count() if torch.cuda.is_available() else 1)
-    parser.add_argument("--strategy", default="ddp" if torch.cuda.is_available() else "auto")
-    parser.add_argument("--num_nodes", default=1)
-    args = parser.parse_args()
-
-    main(args)
-
+    main()
