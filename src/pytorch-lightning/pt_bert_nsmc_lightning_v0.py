@@ -18,8 +18,8 @@ import torch
 from torch.utils.data import Dataset, DataLoader, TensorDataset
 from torch.optim.lr_scheduler import ExponentialLR
 
-#from pytorch_lightning import LightningModule, Trainer, seed_everything
-from lightning import LightningModule, Trainer, seed_everything
+from pytorch_lightning import LightningModule, Trainer, seed_everything
+#from lightning import LightningModule, Trainer, seed_everything
 from lightning.pytorch.loggers import CSVLogger
 
 from transformers import BertForSequenceClassification, BertTokenizer, AdamW

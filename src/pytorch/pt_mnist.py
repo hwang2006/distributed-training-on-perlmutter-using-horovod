@@ -192,6 +192,7 @@ def train_cnn(epoch):
 
 def metric_average(val, name):
     tensor = torch.tensor(val)
+    #tensor.clone.detach()(val)
     avg_tensor = hvd.allreduce(tensor, name=name)
     return avg_tensor.item()
 

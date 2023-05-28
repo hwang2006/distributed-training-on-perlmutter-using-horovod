@@ -20,10 +20,12 @@ from torch.utils.data import DataLoader, random_split
 
 
 # Pytorch-Lightning
-from lightning import LightningDataModule, LightningModule, Trainer
+#from lightning import LightningDataModule, LightningModule, Trainer
+from pytorch_lightning import LightningDataModule, LightningModule, Trainer
 #from pytorch_lightning.loggers import CSVLogger
 from lightning.pytorch.loggers import CSVLogger
-import lightning as L 
+#import lightning as L 
+import pytorch_lightning as L 
 
 
 # Dataset
