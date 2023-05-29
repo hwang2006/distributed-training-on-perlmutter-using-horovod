@@ -681,7 +681,8 @@ nid001140>$ conda activate horovod
 - to run one node with 4 GPUs
 ```
 (horovod) nid001140>$ python distributed-training-on-perlmutter-using-horovod/src/pytorch-lightning/pytorch_mnist_lightning.py 
-(horovod) nid001140>$ python distributed-training-on-perlmutter-using-horovod/src/pytorch-lightning/pt_bert_nsmc_lightning.py 
+(horovod) nid001140>$ python distributed-training-on-perlmutter-using-horovod/src/pytorch-lightning/pt_bert_nsmc_lightning.py
+(horovod) nid001140>$ srun -N 1 --ntasks-per-node=4 python distributed-training-on-perlmutter-using-horovod/src/pytorch-lightning/pt_bert_nsmc_lightning.py
 ```
 - to run one node with 2 GPUs
 ```
