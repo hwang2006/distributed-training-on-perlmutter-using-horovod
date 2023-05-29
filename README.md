@@ -688,4 +688,5 @@ nid001140>$ conda activate horovod
 ```
 (horovod) nid001140>$ python distributed-training-on-perlmutter-using-horovod/src/pytorch-lightning/pytorch_mnist_lightning.py --devices 2
 (horovod) nid001140>$ python distributed-training-on-perlmutter-using-horovod/src/pytorch-lightning/pt_bert_nsmc_lightning.py --devices 2
+(horovod) nid001140>$ srun -N 1 --ntasks-per-node=2 python distributed-training-on-perlmutter-using-horovod/src/pytorch-lightning/pt_bert_nsmc_lightning.py --devices 2
 ```
