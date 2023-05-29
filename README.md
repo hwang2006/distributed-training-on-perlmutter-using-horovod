@@ -633,7 +633,15 @@ We will show a glimpse of how to run a simple pytorch lightning code on multiple
 perlmutter:login15>$ conda activate horovod
 (horovod) perlmutter:login15>$ pip install lightning
 ```
-2. request allocation of available GPU-nodes:
+2. Check the Pytorch Lightning version
+```
+(horovod) perlmutter:login15>$ conda list | grep lightning
+lightning                 2.0.2                    pypi_0    pypi
+lightning-cloud           0.5.34                   pypi_0    pypi
+lightning-utilities       0.8.0                    pypi_0    pypi
+pytorch-lightning         1.6.1                    pypi_0    pypi
+```
+3. request allocation of available GPU-nodes:
 ```
 (horovod) perlmutter:login15>$ salloc --nodes 2 --qos interactive --time 01:00:00 --constraint gpu --gpus-per-node=4 --account=m1234_g
 salloc: Pending job allocation 5472214
@@ -643,7 +651,7 @@ salloc: Granted job allocation 5472214
 salloc: Waiting for resource configuration
 salloc: Nodes nid[001140-001141] are ready for job
 ```
-3. load modules and activate the horovod conda environment:
+4. load modules and activate the horovod conda environment:
 ```
 nid001140>$ module load cudnn/8.3.2 nccl/2.14.3  evp-patch
 nid001140>$ conda activate horovod
