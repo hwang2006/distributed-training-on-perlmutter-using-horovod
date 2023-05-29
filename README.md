@@ -639,7 +639,7 @@ perlmutter:login15>$ conda activate horovod
 lightning                 2.0.2                    pypi_0    pypi
 lightning-cloud           0.5.34                   pypi_0    pypi
 lightning-utilities       0.8.0                    pypi_0    pypi
-pytorch-lightning         1.6.1                    pypi_0    pypi
+pytorch-lightning         1.8.6                    pypi_0    pypi
 ```
 3. request allocation of available GPU-nodes:
 ```
