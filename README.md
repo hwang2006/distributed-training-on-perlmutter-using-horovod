@@ -662,9 +662,9 @@ nid001140>$ conda activate horovod
 ```
 (horovod) nid001140>$ srun -N 2 --ntasks-per-node=4 python distributed-training-on-perlmutter-using-horovod/src/pytorch-lightning/pytorch_mnist_lightning.py --num_nodes 2
 ```
-- to run the Bert NSMC (Naver Sentiment Movie Corpus) example in the src/pytorch-lightning directory, you need to install two additional packages (i.e., emoji and soynlp) and download the nsmc datasets, for example, using git cloning
+- to run the Bert NSMC (Naver Sentiment Movie Corpus) example in the src/pytorch-lightning directory, you need to install additional packages (i.e., emoji, soynlp, transformers and pandas) and download the nsmc datasets, for example, using git cloning
 ```
-(horovod) nid001140>$ pip install emoji==1.7.0 soynlp
+(horovod) nid001140>$ pip install emoji==1.7.0 soynlp transformers pandas
 (horovod) nid001140>$ git clone https://github.com/e9t/nsmc  # download the nsmc datasets in the ./nsmc directory
 (horovod) nid001140>$ srun -N 2 --ntasks-per-node=4 python distributed-training-on-perlmutter-using-horovod/src/pytorch-lightning/pt_bert_nsmc_lightning.py --num_nodes 2
 ```
