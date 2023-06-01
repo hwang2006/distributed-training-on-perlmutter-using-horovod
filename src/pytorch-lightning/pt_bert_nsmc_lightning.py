@@ -1,14 +1,3 @@
-'''
-# download the nsmc data
-$ git clone https://github.com/e9t/nsmc 
-
-# install packages
-$ pip install emoji==1.7.0 soynlp
-
-# pytorch lightning version < 2.0.0
-$ python -c "import lightning as ptl; print(ptl.__version__)"
-'''
-
 import os
 import pandas as pd
 
