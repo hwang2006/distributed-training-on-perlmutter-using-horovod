@@ -479,7 +479,8 @@ module load  cudnn/8.7.0  nccl/2.15.5-ofi  evp-patch
 echo "execute jupyter"
 source ~/.bashrc
 conda activate horovod
-cd $SCRATCH/ddl-projects
+#cd $SCRATCH/ddl-projects #Root/Working directory of jupyter server
+cd $SCRATCH  #Root/Working directory of jupyter server
 jupyter lab --ip=0.0.0.0 --port=${PORT_JU} --NotebookApp.token=${USER}
 #bash -c "jupyter lab --ip=0.0.0.0 --port=${PORT_JU} --NotebookApp.token='${USER}'"
 echo "end of the job"
