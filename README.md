@@ -354,7 +354,7 @@ perlmutter:login15>$ cat horovod_batch.sh
 
 export SLURM_CPU_BIND="cores"
 
-module load  cudnn/8.3.2  nccl/2.15.5-ofi  evp-patch
+module load  cudnn/8.3.2  nccl/2.14.3 evp-patch
 source ~/.bashrc
 conda activate horovod
 
