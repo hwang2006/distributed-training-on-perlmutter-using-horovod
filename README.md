@@ -167,7 +167,7 @@ Available Tensor Operations:
 recommended on Cray systems like Perlmutter. You can also build your horovod environment against [Open MPI](https://docs.nersc.gov/development/programming-models/mpi/openmpi/) by loading the openmpi module. 
 ```
 perlmutter:login15>$ module restore
-perlmutter:login15>$ module load nccl/2.14.3 cudnn/8.7.0
+perlmutter:login15>$ module load nccl/2.15.5-ofi cudnn/8.7.0
 perlmutter:login15>$ module use /global/common/software/dasrepo/swhwang/modulefiles
 perlmutter:login15>$ #module use /global/common/software/m3169/perlmutter/modulefiles
 perlmutter:login15>$ module load openmpi/4.1.3-ucx-1.11.1-cuda-21.11_11.5
