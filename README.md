@@ -420,7 +420,7 @@ perlmutter:login15>$ conda activate horovod
 ```
 2. install Jupyter on the virtual environment:
 ```
-(horovod) perlmutter:login15>$ conda install jupyter
+(horovod) perlmutter:login15>$ conda install jupyter chardet cchardet
 (horovod) perlmutter:login15>$ pip install jupyter-tensorboard
 ```
 3. add the virtual environment as a jupyter kernel:
