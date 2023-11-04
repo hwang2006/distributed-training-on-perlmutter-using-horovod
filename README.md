@@ -580,6 +580,7 @@ RUN \
 [hwang@ubuntu20]$ docker build -t qualis2006/tensorflow-pytorch-horovod:tf2.10_pt1.13 .
 
 # list Docker images on your machine
+[hwang@ubuntu20]$ docker images
 REPOSITORY                              TAG             IMAGE ID       CREATED         SIZE
 qualis2006/tensorflow-pytorch-horovod   tf2.10_pt1.13   cd355901ec90   2 days ago      20.1GB
 .
